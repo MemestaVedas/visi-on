@@ -3,22 +3,22 @@ package screens
 import "strings"
 
 func LauncherView(w, h int) string {
-    return placeholder("▸ NEW BUILD",
-        "Build launcher — type a directory and command.", w, h)
+	return placeholder("▸ NEW BUILD",
+		"Build launcher — type a directory and command.", w, h)
 }
 
 func HistoryView(w, h int) string {
-    return placeholder("▸ BUILD HISTORY",
-        "Past builds — status, duration, error counts.", w, h)
+	return placeholder("▸ BUILD HISTORY",
+		"Past builds — status, duration, error counts.", w, h)
 }
 
 func PluginsView(w, h int) string {
-    return placeholder("▸ PLUGINS",
-        "Slack, Discord, git-detect — manage plugins here.", w, h)
+	return placeholder("▸ PLUGINS",
+		"Slack, Discord, git-detect — manage plugins here.", w, h)
 }
 
 func HelpView(w, h int) string {
-    content := blueStyle.Render("  ▸ KEYBINDINGS\n\n") + dimStyle.Render(`
+	content := blueStyle.Render("  ▸ KEYBINDINGS\n\n") + dimStyle.Render(`
   1-5       Switch tabs          Tab     Next panel
   q         Quit                 Esc     Back to Normal
   :         Command mode         i       Insert mode (Launcher)
@@ -37,13 +37,13 @@ func HelpView(w, h int) string {
 
   MODES:  NORMAL=blue   INSERT=green   COMMAND=orange
   Esc always returns to Normal from any mode.`)
-    return panelFoc.Width(w - 2).Height(h).Render(content)
+	return panelFoc.Width(w - 2).Height(h).Render(content)
 }
 
 func placeholder(title, hint string, w, h int) string {
-    return panelFoc.Width(w-2).Height(h).Render(
-        "\n\n" + blueStyle.Render("  "+strings.ToUpper(title)) +
-        "\n\n" + dimStyle.Render("  "+hint) +
-        "\n\n" + mutedStyle.Render("  Coming in the next phase."),
-    )
+	return panelFoc.Width(w - 2).Height(h).Render(
+		"\n\n" + blueStyle.Render("  "+strings.ToUpper(title)) +
+			"\n\n" + dimStyle.Render("  "+hint) +
+			"\n\n" + mutedStyle.Render("  Coming in the next phase."),
+	)
 }
