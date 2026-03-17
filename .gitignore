@@ -1,0 +1,32 @@
+# Binaries
+vision
+vision.exe
+*.exe
+*.out
+
+# Go build cache
+/tmp/
+dist/
+
+# Go modules (keep go.sum, ignore local replace caches)
+vendor/
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor noise
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Android build outputs
+android/.gradle/
+android/app/build/
+android/local.properties
+
+# Config with secrets (user creates their own from default.toml)
+configs/local.toml
