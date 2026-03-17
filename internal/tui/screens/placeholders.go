@@ -18,7 +18,7 @@ func PluginsView(w, h int) string {
 }
 
 func HelpView(w, h int) string {
-	content := blueStyle.Render("  ▸ KEYBINDINGS\n\n") + dimStyle.Render(`
+	content := superHeader("Keybindings") + "\n\n" + dimStyle.Render(`
   1-5       Switch tabs          Tab     Next panel
   q         Quit                 Esc     Back to Normal
   :         Command mode         i       Insert mode (Launcher)
@@ -42,7 +42,7 @@ func HelpView(w, h int) string {
 
 func placeholder(title, hint string, w, h int) string {
 	return panelFoc.Width(w - 2).Height(h).Render(
-		"\n\n" + blueStyle.Render("  "+strings.ToUpper(title)) +
+    "\n\n" + superHeader(strings.TrimPrefix(title, "▸ ")) +
 			"\n\n" + dimStyle.Render("  "+hint) +
 			"\n\n" + mutedStyle.Render("  Coming in the next phase."),
 	)

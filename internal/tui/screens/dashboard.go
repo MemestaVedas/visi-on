@@ -29,6 +29,10 @@ type DashboardModel struct {
 
 func NewDashboard() DashboardModel { return DashboardModel{} }
 
+func superHeader(title string) string {
+	return blueStyle.Render("---| ") + titleStyle.Render(strings.ToUpper(title)) + blueStyle.Render(" |---")
+}
+
 func (d DashboardModel) View() string {
 	if d.Width < 20 || d.Height < 10 {
 		return ""
@@ -38,24 +42,24 @@ func (d DashboardModel) View() string {
 	mainW := d.Width - sideW - 3
 
 	leftTop := panelFoc.Width(sideW).Height(d.Height / 2).Render(
-		blueStyle.Render("▸ ACTIVE BUILDS (0)") + "\n\n" +
+		superHeader("Active Builds (0)") + "\n\n" +
 			dimStyle.Render("  Waiting for builds...\n\n") +
 			mutedStyle.Render("  :run <command>\n") +
 			mutedStyle.Render("  or press  r  in Launcher"),
 	)
 
 	leftBot := panelStyle.Width(sideW).Height(d.Height - d.Height/2 - 1).Render(
-		titleStyle.Render("  ERROR ANALYSIS (0)") + "\n\n" +
+		superHeader("Error Analysis (0)") + "\n\n" +
 			dimStyle.Render("  No errors — all clear ✓"),
 	)
 
 	rightTop := panelStyle.Width(mainW).Height(d.Height / 2).Render(
-		titleStyle.Render("  FLAMECHART") + "\n\n" +
+		superHeader("Flamechart") + "\n\n" +
 			renderFlame(mainW),
 	)
 
 	rightBot := panelStyle.Width(mainW).Height(d.Height - d.Height/2 - 1).Render(
-		titleStyle.Render("  LOG OUTPUT") + "\n\n" +
+		superHeader("Log Output") + "\n\n" +
 			dimStyle.Render("  No active build — logs stream here\n") +
 			dimStyle.Render("  G=follow  /=search  f=focus"),
 	)
