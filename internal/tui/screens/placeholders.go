@@ -1,6 +1,10 @@
 package screens
 
-import "strings"
+import (
+	"strings"
+)
+
+
 
 func LauncherView(w, h int) string {
 	return placeholder("▸ NEW BUILD",
@@ -42,7 +46,7 @@ func HelpView(w, h int) string {
 
 func placeholder(title, hint string, w, h int) string {
 	return panelFoc.Width(w - 2).Height(h).Render(
-    "\n\n" + superHeader(strings.TrimPrefix(title, "▸ ")) +
+		"\n\n" + superHeader(strings.TrimPrefix(title, "▸ ")) +
 			"\n\n" + dimStyle.Render("  "+hint) +
 			"\n\n" + mutedStyle.Render("  Coming in the next phase."),
 	)

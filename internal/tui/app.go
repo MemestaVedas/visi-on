@@ -1,10 +1,14 @@
 package tui
 
 import (
+	"strings"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/visi-on/visi-on/internal/tui/screens"
 )
+
+var availableCommands = []string{"quit", "help", "plugins", "dashboard", "launcher", "history"}
 
 type AppModel struct {
 	mode       Mode
@@ -78,13 +82,36 @@ func (m AppModel) insertKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 func (m AppModel) commandKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.Type {
 	case tea.KeyEnter:
-		cmd := m.commandBuf
+		cmd := strings.TrimSpace(m.commandBuf)
 		m.mode = ModeNormal
 		m.commandBuf = ""
+		
+		switch cmd {
+		case "q", "quit":
+			return m, tea.Quit
+		case "help":
+			m.activeTab = TabHelp
+		case "plugins":
+			m.activeTab = TabPlugins
+		case "dashboard":
+			m.activeTab = TabDashboard
+		case "launcher":
+			m.activeTab = TabLauncher
+		case "history":
+			m.activeTab = TabHistory
+		}
+		
 		return m, m.execCmd(cmd)
 	case tea.KeyBackspace:
 		if len(m.commandBuf) > 0 {
 			m.commandBuf = m.commandBuf[:len(m.commandBuf)-1]
+		}
+	case tea.KeyTab:
+		for _, c := range availableCommands {
+			if strings.HasPrefix(c, m.commandBuf) {
+				m.commandBuf = c
+				break
+			}
 		}
 	case tea.KeyRunes:
 		m.commandBuf += string(msg.Runes)
@@ -93,9 +120,6 @@ func (m AppModel) commandKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 }
 
 func (m AppModel) execCmd(cmd string) tea.Cmd {
-	if cmd == "q" || cmd == "quit" {
-		return tea.Quit
-	}
 	return nil
 }
 

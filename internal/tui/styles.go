@@ -1,25 +1,28 @@
 package tui
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"github.com/charmbracelet/lipgloss"
+	"github.com/visi-on/visi-on/internal/tui/colors"
+)
 
-const (
-	colorBg          = lipgloss.Color("#0d0f14")
-	colorBgPanel     = lipgloss.Color("#12151c")
-	colorBgPanelAlt  = lipgloss.Color("#161a24")
-	colorBorder      = lipgloss.Color("#2a2f3d")
-	colorBorderFocus = lipgloss.Color("#4a90d9")
+var (
+	colorBg          = colors.Bg
+	colorBgPanel     = colors.BgPanel
+	colorBgPanelAlt  = colors.BgPanelAlt
+	colorBorder      = colors.Border
+	colorBorderFocus = colors.BorderFocus
 
-	colorNormal  = lipgloss.Color("#4a90d9")
-	colorInsert  = lipgloss.Color("#56d4a0")
-	colorCommand = lipgloss.Color("#e8a245")
+	colorNormal  = colors.Normal
+	colorInsert  = colors.Insert
+	colorCommand = colors.Command
 
-	colorTextPrimary   = lipgloss.Color("#d4d8e8")
-	colorTextSecondary = lipgloss.Color("#6b7594")
-	colorTextMuted     = lipgloss.Color("#3d4460")
+	colorTextPrimary   = colors.TextPrimary
+	colorTextSecondary = colors.TextSecondary
+	colorTextMuted     = colors.TextMuted
 
-	colorSuccess = lipgloss.Color("#56d4a0")
-	colorError   = lipgloss.Color("#e05c6e")
-	colorRunning = lipgloss.Color("#4a90d9")
+	colorSuccess = colors.Success
+	colorError   = colors.Error
+	colorRunning = colors.Running
 )
 
 var (
@@ -33,9 +36,9 @@ var (
 				BorderForeground(colorBorderFocus).
 				Padding(0, 1)
 
-	TabBarStyle      = lipgloss.NewStyle().Background(colorBg)
-	TabActiveStyle   = lipgloss.NewStyle().Foreground(colorNormal).Bold(true).Padding(0, 2)
-	TabInactiveStyle = lipgloss.NewStyle().Foreground(colorTextMuted).Padding(0, 2)
+	TabBarStyle      = lipgloss.NewStyle().Background(colorBg).Padding(1, 0)
+	TabActiveStyle   = lipgloss.NewStyle().Foreground(colorBg).Background(colorNormal).Bold(true).Padding(0, 2).Margin(0, 1)
+	TabInactiveStyle = lipgloss.NewStyle().Foreground(colorTextSecondary).Padding(0, 2)
 	TabNumberStyle   = lipgloss.NewStyle().Foreground(colorTextMuted)
 
 	StatusBarStyle = lipgloss.NewStyle().Background(colorBgPanel).Foreground(colorTextSecondary).Padding(0, 1)

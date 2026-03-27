@@ -5,15 +5,16 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/visi-on/visi-on/internal/tui/colors"
 )
 
 var (
-	border      = lipgloss.Color("#2a2f3d")
-	borderFocus = lipgloss.Color("#4a90d9")
-	blue        = lipgloss.Color("#4a90d9")
-	muted       = lipgloss.Color("#3d4460")
-	dim         = lipgloss.Color("#6b7594")
-	body        = lipgloss.Color("#d4d8e8")
+	border      = colors.Border
+	borderFocus = colors.BorderFocus
+	blue        = colors.Normal
+	muted       = colors.TextMuted
+	dim         = colors.TextSecondary
+	body        = colors.TextPrimary
 
 	panelStyle = lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(border).Padding(0, 1)
 	panelFoc   = lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(borderFocus).Padding(0, 1)
