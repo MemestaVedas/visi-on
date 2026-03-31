@@ -28,7 +28,31 @@ var (
 	blueStyle     = lipgloss.NewStyle().Foreground(blue).Bold(true)
 	glowStyle     = lipgloss.NewStyle().Foreground(glowBlue).Bold(true)
 	accentStyle   = lipgloss.NewStyle().Foreground(body).Background(accentBg).Padding(0, 1)
+	waveStyle     = lipgloss.NewStyle().Foreground(glowTeal)
 )
+
+var waveFrames = []string{"▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃", "▂"}
+
+func renderWave(width int, frame int) string {
+	if width < 10 {
+		return ""
+	}
+	var wave []string
+	frameLen := len(waveFrames)
+	for i := 0; i < width; i++ {
+		offset := (i + frame) % frameLen
+		wave = append(wave, waveStyle.Render(waveFrames[offset]))
+	}
+	return strings.Join(wave, "")
+}
+
+func getAnimFrame(anim interface{}) int {
+	if anim == nil {
+		return 0
+	}
+	// Type assert to AnimationState if needed in future
+	return 0
+}
 
 type DashboardModel struct {
 	Width, Height int
@@ -69,7 +93,9 @@ func (d DashboardModel) View() string {
 
 	rightTop := panelStyle.Width(mainW).Height(d.Height / 2).Render(
 		superHeader("Pipeline Timeline") + "\n\n" +
-			renderFlame(mainW),
+			renderFlame(mainW) + "\n\n" +
+			dimStyle.Render("  Activity wave:") + "\n" +
+			"  " + renderWave(mainW-4, getAnimFrame(d.Animation)),
 	)
 
 	rightBot := panelStyle.Width(mainW).Height(d.Height - d.Height/2 - 1).Render(
