@@ -4,21 +4,19 @@ import (
 	"strings"
 )
 
-
-
 func LauncherView(w, h int) string {
-	return placeholder("▸ NEW BUILD",
-		"Build launcher — type a directory and command.", w, h)
+	return placeholder("Build Launcher",
+		"Create and run build profiles from a single command lane.", w, h)
 }
 
 func HistoryView(w, h int) string {
-	return placeholder("▸ BUILD HISTORY",
-		"Past builds — status, duration, error counts.", w, h)
+	return placeholder("Build History",
+		"Explore previous runs with status, duration, and error density.", w, h)
 }
 
 func PluginsView(w, h int) string {
-	return placeholder("▸ PLUGINS",
-		"Slack, Discord, git-detect — manage plugins here.", w, h)
+	return placeholder("Plugins",
+		"Manage integrations like Slack, Discord, and repository analyzers.", w, h)
 }
 
 func HelpView(w, h int) string {
@@ -39,15 +37,16 @@ func HelpView(w, h int) string {
   :profile save <n>   save a profile
   :q                  quit
 
-  MODES:  NORMAL=blue   INSERT=green   COMMAND=orange
+  MODES:  NORMAL=blue   INSERT=teal   COMMAND=amber
   Esc always returns to Normal from any mode.`)
 	return panelFoc.Width(w - 2).Height(h).Render(content)
 }
 
 func placeholder(title, hint string, w, h int) string {
 	return panelFoc.Width(w - 2).Height(h).Render(
-		"\n\n" + superHeader(strings.TrimPrefix(title, "▸ ")) +
+		"\n" + superHeader(strings.TrimPrefix(title, "▸ ")) +
 			"\n\n" + dimStyle.Render("  "+hint) +
-			"\n\n" + mutedStyle.Render("  Coming in the next phase."),
+			"\n\n" + mutedStyle.Render("  This workspace will become interactive in the next phase.") +
+			"\n" + mutedStyle.Render("  Tip: use :help to see key commands while this screen evolves."),
 	)
 }

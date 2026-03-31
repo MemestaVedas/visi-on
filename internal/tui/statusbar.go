@@ -17,15 +17,19 @@ type StatusBarModel struct {
 
 func (s StatusBarModel) View(m Mode, width int) string {
 	sep := SepStyle.Render()
-	title := AppTitleStyle.Render("VISI-ON v1.0")
+	title := AppTitleStyle.Render("build orchestration")
 	pill := ModeStyle(m).Render(ModeName(m))
-	conn := TextMuted.Render("○ Offline")
+	conn := MetricErrStyle.Render("OFFLINE")
 	if s.Connected {
-		conn = TextSuccess.Render("● Connected")
+		conn = MetricOKStyle.Render("CONNECTED")
 	}
 	left := strings.Join([]string{title, sep, pill, sep, conn}, " ")
-	right := TextSecondary.Render(fmt.Sprintf("CPU %.0f%%  RAM %.1fG  ↑%.0f ↓%.0fKB",
-		s.CPUPct, s.RAMUsedGB, s.NetUpKB, s.NetDownKB))
+	right := strings.Join([]string{
+		MetricWarnStyle.Render(fmt.Sprintf("CPU %.0f%%", s.CPUPct)),
+		MetricOKStyle.Render(fmt.Sprintf("RAM %.1fG", s.RAMUsedGB)),
+		TextSecondary.Render(fmt.Sprintf("UP %.0fKB", s.NetUpKB)),
+		TextSecondary.Render(fmt.Sprintf("DOWN %.0fKB", s.NetDownKB)),
+	}, " ")
 	gap := width - lipgloss.Width(left) - lipgloss.Width(right) - 2
 	if gap < 1 {
 		gap = 1

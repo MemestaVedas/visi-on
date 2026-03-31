@@ -31,7 +31,7 @@ type DashboardModel struct {
 func NewDashboard() DashboardModel { return DashboardModel{} }
 
 func superHeader(title string) string {
-	return blueStyle.Render("---| ") + titleStyle.Render(strings.ToUpper(title)) + blueStyle.Render(" |---")
+	return blueStyle.Render("[ ") + titleStyle.Render(strings.ToUpper(title)) + blueStyle.Render(" ]")
 }
 
 func (d DashboardModel) View() string {
@@ -43,26 +43,34 @@ func (d DashboardModel) View() string {
 	mainW := d.Width - sideW - 3
 
 	leftTop := panelFoc.Width(sideW).Height(d.Height / 2).Render(
-		superHeader("Active Builds (0)") + "\n\n" +
-			dimStyle.Render("  Waiting for builds...\n\n") +
-			mutedStyle.Render("  :run <command>\n") +
-			mutedStyle.Render("  or press  r  in Launcher"),
+		superHeader("Active Builds") + "\n\n" +
+			dimStyle.Render("  Queue is idle. No active pipelines.") + "\n\n" +
+			mutedStyle.Render("  Start a run: ") + blueStyle.Render(":run <command>") + "\n" +
+			mutedStyle.Render("  Quick key: ") + blueStyle.Render("r") + mutedStyle.Render(" in Launcher") + "\n\n" +
+			mutedStyle.Render("  Last result") + "\n" +
+			dimStyle.Render("  duration  0.0s   errors  0   warnings  0"),
 	)
 
 	leftBot := panelStyle.Width(sideW).Height(d.Height - d.Height/2 - 1).Render(
-		superHeader("Error Analysis (0)") + "\n\n" +
-			dimStyle.Render("  No errors — all clear ✓"),
+		superHeader("Error Analysis") + "\n\n" +
+			dimStyle.Render("  Workspace health is clean.") + "\n\n" +
+			mutedStyle.Render("  Most common failures") + "\n" +
+			dimStyle.Render("  1) none") + "\n" +
+			dimStyle.Render("  2) none") + "\n" +
+			dimStyle.Render("  3) none"),
 	)
 
 	rightTop := panelStyle.Width(mainW).Height(d.Height / 2).Render(
-		superHeader("Flamechart") + "\n\n" +
+		superHeader("Pipeline Timeline") + "\n\n" +
 			renderFlame(mainW),
 	)
 
 	rightBot := panelStyle.Width(mainW).Height(d.Height - d.Height/2 - 1).Render(
 		superHeader("Log Output") + "\n\n" +
-			dimStyle.Render("  No active build — logs stream here\n") +
-			dimStyle.Render("  G=follow  /=search  f=focus"),
+			dimStyle.Render("  Live stream appears when a build starts.") + "\n\n" +
+			mutedStyle.Render("  Controls: ") + blueStyle.Render("G") + mutedStyle.Render(" follow   ") +
+			blueStyle.Render("/") + mutedStyle.Render(" search   ") +
+			blueStyle.Render("f") + mutedStyle.Render(" focus panel"),
 	)
 
 	left := lipgloss.JoinVertical(lipgloss.Left, leftTop, leftBot)
@@ -77,9 +85,13 @@ func renderFlame(width int) string {
 	}
 	stages := []string{"Compile", "Link   ", "Bundle "}
 	var lines []string
-	for _, s := range stages {
-		bar := mutedStyle.Render(strings.Repeat("░", bw))
-		lines = append(lines, fmt.Sprintf("  %s %s  0%%", s, bar))
+	for i, s := range stages {
+		fill := i * bw / 6
+		if fill < 1 {
+			fill = 1
+		}
+		bar := blueStyle.Render(strings.Repeat("█", fill)) + mutedStyle.Render(strings.Repeat("░", bw-fill))
+		lines = append(lines, fmt.Sprintf("  %s %s  %d%%", s, bar, i*15))
 	}
 	return strings.Join(lines, "\n")
 }
