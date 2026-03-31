@@ -9,8 +9,11 @@ var (
 	colorBg          = colors.Bg
 	colorBgPanel     = colors.BgPanel
 	colorBgPanelAlt  = colors.BgPanelAlt
+	colorBgAccent    = colors.BgAccent
 	colorBorder      = colors.Border
 	colorBorderFocus = colors.BorderFocus
+	colorGlowBlue    = colors.GlowBlue
+	colorGlowTeal    = colors.GlowTeal
 
 	colorNormal  = colors.Normal
 	colorInsert  = colors.Insert
@@ -38,8 +41,14 @@ var (
 				BorderForeground(colorBorderFocus).
 				Padding(0, 1)
 
+	PanelElevatedStyle = lipgloss.NewStyle().
+				Background(colorBgPanel).
+				Border(lipgloss.RoundedBorder()).
+				BorderForeground(colorGlowBlue).
+				Padding(0, 1)
+
 	TabBarStyle      = lipgloss.NewStyle().Background(colorBg).Padding(0, 1)
-	TabActiveStyle   = lipgloss.NewStyle().Foreground(colorTextPrimary).Background(colorBgPanel).Bold(true).Padding(0, 2).Border(lipgloss.NormalBorder()).BorderForeground(colorBorderFocus)
+	TabActiveStyle   = lipgloss.NewStyle().Foreground(colorTextPrimary).Background(colorBgPanel).Bold(true).Padding(0, 2).Border(lipgloss.NormalBorder()).BorderForeground(colorGlowBlue)
 	TabInactiveStyle = lipgloss.NewStyle().Foreground(colorTextSecondary).Background(colorBgPanelAlt).Padding(0, 2).Border(lipgloss.NormalBorder()).BorderForeground(colorBorder)
 	TabNumberStyle   = lipgloss.NewStyle().Foreground(colorTextMuted)
 	BrandStyle       = lipgloss.NewStyle().Foreground(colorTextPrimary).Background(colorNormal).Bold(true).Padding(0, 1).MarginRight(1)
@@ -61,6 +70,13 @@ var (
 	MetricOKStyle   = lipgloss.NewStyle().Foreground(colorTextPrimary).Background(colorBgPanelAlt).Padding(0, 1)
 	MetricWarnStyle = lipgloss.NewStyle().Foreground(colorCommand).Background(colorBgPanelAlt).Padding(0, 1)
 	MetricErrStyle  = lipgloss.NewStyle().Foreground(colorError).Background(colorBgPanelAlt).Padding(0, 1)
+
+	// Progress & selection styles
+	ProgressBarFill    = lipgloss.NewStyle().Foreground(colorGlowBlue)
+	ProgressBarEmpty   = lipgloss.NewStyle().Foreground(colorBorder)
+	SelectionHighlight = lipgloss.NewStyle().Foreground(colorTextPrimary).Background(colorBgAccent)
+	SelectionBorder    = lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colorGlowTeal)
+	FocusGlow          = lipgloss.NewStyle().BorderForeground(colorGlowBlue)
 )
 
 func ModeStyle(m Mode) lipgloss.Style {
@@ -82,5 +98,21 @@ func ModeName(m Mode) string {
 		return " COMMAND "
 	default:
 		return " NORMAL "
+	}
+}
+
+func PanelStyleForMode(m Mode) lipgloss.Style {
+	base := lipgloss.NewStyle().
+		Background(colorBgPanel).
+		Border(lipgloss.RoundedBorder()).
+		Padding(0, 1)
+
+	switch m {
+	case ModeInsert:
+		return base.BorderForeground(colorGlowTeal)
+	case ModeCommand:
+		return base.BorderForeground(colorCommand)
+	default:
+		return base.BorderForeground(colorBorderFocus)
 	}
 }

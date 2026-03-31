@@ -19,6 +19,7 @@ func HintsBarView(activeTab Tab, mode Mode, commandBuf string, width int) string
 	hint := tabHints[activeTab]
 	parts := strings.Split(hint, "   ")
 	var out []string
+	separator := TextMuted.Render(" • ")
 	for _, p := range parts {
 		kv := strings.SplitN(p, " ", 2)
 		if len(kv) == 2 {
@@ -27,5 +28,5 @@ func HintsBarView(activeTab Tab, mode Mode, commandBuf string, width int) string
 			out = append(out, TextMuted.Render(p))
 		}
 	}
-	return HintsBarStyle.Width(width).Render(strings.Join(out, TextMuted.Render("  •  ")))
+	return HintsBarStyle.Width(width).Render(strings.Join(out, separator))
 }

@@ -17,14 +17,21 @@ const (
 	NightAmber    = "#ffb454"
 	NightRed      = "#ff6b81"
 	NightGreen    = "#3dd68c"
+	// Focus & glow accents
+	NightGlowBlue    = "#6d95ff"
+	NightGlowTeal    = "#52dfc9"
+	NightAccentFaint = "#1f2e47"
 )
 
 var (
 	Bg          = lipgloss.Color(NightInk)
 	BgPanel     = lipgloss.Color(NightPanel)
 	BgPanelAlt  = lipgloss.Color(NightPanelAlt)
+	BgAccent    = lipgloss.Color(NightAccentFaint)
 	Border      = lipgloss.Color(NightBorder)
 	BorderFocus = lipgloss.Color(NightBorderHi)
+	GlowBlue    = lipgloss.Color(NightGlowBlue)
+	GlowTeal    = lipgloss.Color(NightGlowTeal)
 
 	Normal  = lipgloss.Color(NightBlue)
 	Insert  = lipgloss.Color(NightTeal)

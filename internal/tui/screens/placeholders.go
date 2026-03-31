@@ -21,32 +21,32 @@ func PluginsView(w, h int) string {
 
 func HelpView(w, h int) string {
 	content := superHeader("Keybindings") + "\n\n" + dimStyle.Render(`
-  1-5       Switch tabs          Tab     Next panel
-  q         Quit                 Esc     Back to Normal
-  :         Command mode         i       Insert mode (Launcher)
+  1-5       `) + glowStyle.Render("Switch tabs") + dimStyle.Render(`          Tab     Next panel
+  `) + glowStyle.Render("q") + dimStyle.Render(`         Quit                 `) + glowStyle.Render("Esc") + dimStyle.Render(`     Back to Normal
+  `) + glowStyle.Render(":") + dimStyle.Render(`         Command mode         `) + glowStyle.Render("i") + dimStyle.Render(`       Insert mode (Launcher)
 
   TIER 2 — BUILD CONTROL (Normal, Dashboard)
-  r  Run build    x  Kill    f  Focus log    o  Open in editor
+  `) + glowStyle.Render("r") + dimStyle.Render(`  Run build    `) + glowStyle.Render("x") + dimStyle.Render(`  Kill    `) + glowStyle.Render("f") + dimStyle.Render(`  Focus log    `) + glowStyle.Render("o") + dimStyle.Render(`  Open in editor
 
   TIER 3 — LOG NAVIGATION (Normal, log panel focused)
-  j/k Scroll    g Top    G Bottom+follow    / Search    n/N Match
+  `) + glowStyle.Render("j/k") + dimStyle.Render(` Scroll    `) + glowStyle.Render("g") + dimStyle.Render(` Top    `) + glowStyle.Render("G") + dimStyle.Render(` Bottom+follow    `) + glowStyle.Render("/") + dimStyle.Render(` Search    `) + glowStyle.Render("n/N") + dimStyle.Render(` Match
 
   TIER 4 — COMMAND MODE
-  :run <cmd>          run a build
-  :kill <id>          kill a build
-  :profile save <n>   save a profile
-  :q                  quit
+  `) + glowStyle.Render(":run <cmd>") + dimStyle.Render(`          run a build
+  `) + glowStyle.Render(":kill <id>") + dimStyle.Render(`          kill a build
+  `) + glowStyle.Render(":profile save <n>") + dimStyle.Render(`   save a profile
+  `) + glowStyle.Render(":q") + dimStyle.Render(`                  quit
 
-  MODES:  NORMAL=blue   INSERT=teal   COMMAND=amber
-  Esc always returns to Normal from any mode.`)
-	return panelFoc.Width(w - 2).Height(h).Render(content)
+  MODES:  `) + blueStyle.Render("NORMAL") + dimStyle.Render(`=blue   `) + accentStyle.Render("INSERT") + dimStyle.Render(`=teal   `) + mutedStyle.Render("COMMAND") + dimStyle.Render(`=amber
+  `) + glowStyle.Render("Esc") + dimStyle.Render(` always returns to Normal from any mode.`)
+	return panelElevated.Width(w - 2).Height(h).Render(content)
 }
 
 func placeholder(title, hint string, w, h int) string {
-	return panelFoc.Width(w - 2).Height(h).Render(
+	return panelElevated.Width(w - 2).Height(h).Render(
 		"\n" + superHeader(strings.TrimPrefix(title, "▸ ")) +
 			"\n\n" + dimStyle.Render("  "+hint) +
-			"\n\n" + mutedStyle.Render("  This workspace will become interactive in the next phase.") +
-			"\n" + mutedStyle.Render("  Tip: use :help to see key commands while this screen evolves."),
+			"\n\n" + accentStyle.Render("  ✓ Enhanced interactivity in progress") +
+			"\n" + mutedStyle.Render("  Tip: use :help to see key commands to explore the interface."),
 	)
 }
