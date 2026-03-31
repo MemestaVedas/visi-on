@@ -45,7 +45,7 @@ func (s StatusBarModel) View(m Mode, width int) string {
 func (s StatusBarModel) ViewWithAnimation(m Mode, width int, anim *AnimationState) string {
 	sep := SepStyle.Render()
 	title := AppTitleStyle.Render("build orchestration")
-	pill := ModeStyle(m).Render(ModeName(m))
+	pill := ModeStyleAnimated(m, anim).Render(ModeNameAnimated(m, anim))
 
 	// Animated connection indicator with pulsing effect
 	var conn string

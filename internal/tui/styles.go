@@ -101,6 +101,28 @@ func ModeName(m Mode) string {
 	}
 }
 
+func ModeStyleAnimated(m Mode, anim *AnimationState) lipgloss.Style {
+	switch m {
+	case ModeInsert:
+		return lipgloss.NewStyle().Background(colorInsert).Foreground(colorBg).Bold(true).Padding(0, 1).Border(lipgloss.NormalBorder()).BorderForeground(colorInsert)
+	case ModeCommand:
+		return lipgloss.NewStyle().Background(colorCommand).Foreground(colorBg).Bold(true).Padding(0, 1).Border(lipgloss.NormalBorder()).BorderForeground(colorCommand)
+	default:
+		return lipgloss.NewStyle().Background(colorNormal).Foreground(colorBg).Bold(true).Padding(0, 1).Border(lipgloss.NormalBorder()).BorderForeground(colorNormal)
+	}
+}
+
+func ModeNameAnimated(m Mode, anim *AnimationState) string {
+	switch m {
+	case ModeInsert:
+		return " " + anim.GetSpinner() + " INSERT "
+	case ModeCommand:
+		return " " + anim.GetSpinner() + " COMMAND "
+	default:
+		return " NORMAL "
+	}
+}
+
 func PanelStyleForMode(m Mode) lipgloss.Style {
 	base := lipgloss.NewStyle().
 		Background(colorBgPanel).

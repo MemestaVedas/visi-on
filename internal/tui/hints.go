@@ -1,6 +1,23 @@
 package tui
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/charmbracelet/lipgloss"
+)
+
+var (
+	HintButtonStyle = lipgloss.NewStyle().
+			Foreground(colorTextPrimary).
+			Background(colorBgPanelAlt).
+			Padding(0, 1).
+			Bold(true)
+	HintButtonActiveStyle = lipgloss.NewStyle().
+				Foreground(colorBg).
+				Background(colorGlowBlue).
+				Padding(0, 1).
+				Bold(true)
+)
 
 var tabHints = map[Tab]string{
 	TabDashboard: "r Run build   x Kill build   f Focus logs   o Open editor   / Search logs",
@@ -20,10 +37,17 @@ func HintsBarView(activeTab Tab, mode Mode, commandBuf string, width int) string
 	parts := strings.Split(hint, "   ")
 	var out []string
 	separator := TextMuted.Render(" • ")
-	for _, p := range parts {
+	for i, p := range parts {
 		kv := strings.SplitN(p, " ", 2)
 		if len(kv) == 2 {
-			out = append(out, HintKeyStyle.Render(kv[0])+" "+TextSecondary.Render(kv[1]))
+			// Alternate button styles for visual rhythm
+			var keyStyle lipgloss.Style
+			if i%2 == 0 {
+				keyStyle = HintButtonStyle
+			} else {
+				keyStyle = lipgloss.NewStyle().Foreground(colorGlowBlue).Bold(true)
+			}
+			out = append(out, keyStyle.Render(kv[0])+" "+TextSecondary.Render(kv[1]))
 		} else {
 			out = append(out, TextMuted.Render(p))
 		}
