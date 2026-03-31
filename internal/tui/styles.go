@@ -77,6 +77,37 @@ var (
 	SelectionHighlight = lipgloss.NewStyle().Foreground(colorTextPrimary).Background(colorBgAccent)
 	SelectionBorder    = lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colorGlowTeal)
 	FocusGlow          = lipgloss.NewStyle().BorderForeground(colorGlowBlue)
+
+	// Error & notification styles
+	PanelErrorStyle = lipgloss.NewStyle().
+			Background(colorBgPanel).
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(colorError).
+			Padding(0, 1)
+
+	ToastSuccessStyle = lipgloss.NewStyle().
+				Background(colorSuccess).
+				Foreground(colorBg).
+				Bold(true).
+				Padding(1, 2).
+				Border(lipgloss.RoundedBorder()).
+				BorderForeground(colorSuccess)
+
+	ToastErrorStyle = lipgloss.NewStyle().
+			Background(colorError).
+			Foreground(colorBg).
+			Bold(true).
+			Padding(1, 2).
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(colorError)
+
+	ToastInfoStyle = lipgloss.NewStyle().
+			Background(colorNormal).
+			Foreground(colorBg).
+			Bold(true).
+			Padding(1, 2).
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(colorNormal)
 )
 
 func ModeStyle(m Mode) lipgloss.Style {

@@ -19,11 +19,13 @@ type AppModel struct {
 	commandBuf string
 	animation  AnimationState
 	ticker     *time.Ticker
+	notifs     *NotificationQueue
 }
 
 func NewAppModel() AppModel {
 	m := AppModel{mode: ModeNormal, activeTab: TabDashboard}
 	m.ticker = time.NewTicker(50 * time.Millisecond)
+	m.notifs = NewNotificationQueue(5)
 	return m
 }
 
@@ -153,8 +155,13 @@ func (m AppModel) View() string {
 	if wsH < 1 {
 		wsH = 1
 	}
-	return lipgloss.JoinVertical(lipgloss.Left,
-		tabBar, m.workspace(m.w, wsH), status, hintsBar)
+	var elements []string
+	elements = append(elements, tabBar, m.workspace(m.w, wsH))
+	for _, notif := range m.notifs.GetActive() {
+		elements = append(elements, notif.Render(&m.animation))
+	}
+	elements = append(elements, status, hintsBar)
+	return lipgloss.JoinVertical(lipgloss.Left, elements...)
 }
 
 func (m AppModel) workspace(w, h int) string {
