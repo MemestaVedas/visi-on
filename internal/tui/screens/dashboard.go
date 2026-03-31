@@ -32,6 +32,7 @@ var (
 
 type DashboardModel struct {
 	Width, Height int
+	Animation     interface{} // AnimationState pointer
 }
 
 func NewDashboard() DashboardModel { return DashboardModel{} }
@@ -85,26 +86,27 @@ func (d DashboardModel) View() string {
 }
 
 func renderFlame(width int) string {
+	return renderFlameWithAnimation(width, nil)
+}
+
+func renderFlameWithAnimation(width int, anim interface{}) string {
 	bw := width - 30
 	if bw < 4 {
 		bw = 4
 	}
 	stages := []string{"  Compile", "  Link   ", "  Bundle "}
-	colors := []lipgloss.Style{
-		lipgloss.NewStyle().Foreground(colors.GlowBlue),
-		lipgloss.NewStyle().Foreground(colors.GlowTeal),
-		lipgloss.NewStyle().Foreground(colors.Normal),
-	}
+	stageColors := []lipgloss.Color{colors.GlowBlue, colors.GlowTeal, colors.Normal}
+	percentages := []float64{20, 35, 50}
 	var lines []string
 	for i, s := range stages {
-		fill := i * bw / 6
+		pct := percentages[i]
+		fill := int(float64(bw) * pct / 100)
 		if fill < 1 {
 			fill = 1
 		}
-		colorStyle := colors[i]
+		colorStyle := lipgloss.NewStyle().Foreground(stageColors[i])
 		bar := colorStyle.Render(strings.Repeat("█", fill)) + dimStyle.Render(strings.Repeat("░", bw-fill))
-		pct := i * 15
-		lines = append(lines, fmt.Sprintf("%s %s  %d%%", s, bar, pct))
+		lines = append(lines, fmt.Sprintf("%s %s  %.0f%%", s, bar, pct))
 	}
 	return strings.Join(lines, "\n")
 }

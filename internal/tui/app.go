@@ -2,6 +2,7 @@ package tui
 
 import (
 	"strings"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -16,16 +17,33 @@ type AppModel struct {
 	w, h       int
 	statusBar  StatusBarModel
 	commandBuf string
+	animation  AnimationState
+	ticker     *time.Ticker
 }
 
-func NewAppModel() AppModel { return AppModel{mode: ModeNormal, activeTab: TabDashboard} }
+func NewAppModel() AppModel {
+	m := AppModel{mode: ModeNormal, activeTab: TabDashboard}
+	m.ticker = time.NewTicker(50 * time.Millisecond)
+	return m
+}
 
-func (m AppModel) Init() tea.Cmd { return nil }
+func (m AppModel) Init() tea.Cmd {
+	return tea.Tick(50*time.Millisecond, func(t time.Time) tea.Msg {
+		return AnimationTickMsg{}
+	})
+}
+
+type AnimationTickMsg struct{}
 
 func (m AppModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.w, m.h = msg.Width, msg.Height
+	case AnimationTickMsg:
+		m.animation.NextFrame()
+		return m, tea.Tick(50*time.Millisecond, func(t time.Time) tea.Msg {
+			return AnimationTickMsg{}
+		})
 	case tea.KeyMsg:
 		return m.key(msg)
 	}
@@ -85,7 +103,7 @@ func (m AppModel) commandKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		cmd := strings.TrimSpace(m.commandBuf)
 		m.mode = ModeNormal
 		m.commandBuf = ""
-		
+
 		switch cmd {
 		case "q", "quit":
 			return m, tea.Quit
@@ -100,7 +118,7 @@ func (m AppModel) commandKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		case "history":
 			m.activeTab = TabHistory
 		}
-		
+
 		return m, m.execCmd(cmd)
 	case tea.KeyBackspace:
 		if len(m.commandBuf) > 0 {
@@ -128,15 +146,15 @@ func (m AppModel) View() string {
 		return ""
 	}
 	tabBar := TabBarView(m.activeTab, m.w)
-	statusBar := m.statusBar.View(m.mode, m.w)
+	status := m.statusBar.ViewWithAnimation(m.mode, m.w, &m.animation)
 	hintsBar := HintsBarView(m.activeTab, m.mode, m.commandBuf, m.w)
-	chromeH := lipgloss.Height(tabBar) + lipgloss.Height(statusBar) + lipgloss.Height(hintsBar) + 2
+	chromeH := lipgloss.Height(tabBar) + lipgloss.Height(status) + lipgloss.Height(hintsBar) + 2
 	wsH := m.h - chromeH
 	if wsH < 1 {
 		wsH = 1
 	}
 	return lipgloss.JoinVertical(lipgloss.Left,
-		tabBar, m.workspace(m.w, wsH), statusBar, hintsBar)
+		tabBar, m.workspace(m.w, wsH), status, hintsBar)
 }
 
 func (m AppModel) workspace(w, h int) string {
@@ -144,6 +162,7 @@ func (m AppModel) workspace(w, h int) string {
 	case TabDashboard:
 		d := screens.NewDashboard()
 		d.Width, d.Height = w, h
+		d.Animation = &m.animation
 		return d.View()
 	case TabLauncher:
 		return screens.LauncherView(w, h)
